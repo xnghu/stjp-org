@@ -15,8 +15,8 @@ jobs:
 
     - name: Install SSH key
       run: |
-        echo "${{ secrets.SSHKEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
+        echo "${{ secrets.SSHKEY }}" > ~/.ssh/github
+        chmod 600 ~/.ssh/github
         ssh-keyscan -H 89.147.108.14 >> ~/.ssh/known_hosts
 
     - name: Deploy to VPS
