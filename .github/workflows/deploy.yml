@@ -1,31 +1,24 @@
-name: Deploy
+name: Deploy to VPS
 
-on: [push]
+on:
+  push:
+    branches:
+      - main  # Adjust to your main branch name
 
 jobs:
-  build:
-
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    - name: Copy repository contents via scp
-      uses: appleboy/scp-action@master
-      env:
-        HOST: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
-      with:
-        source: "."
-        target: "/var/www/stjp.org/dev"
+    - name: Install SSH key
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H <your-vps-server-ip> >> ~/.ssh/known_hosts
 
-    - name: Executing remote command
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
-        script: npm run build
+    - name: Deploy to VPS
+      run: |
+        ssh eve@89.147.108.14 'cd /var/www/dev-stjp && git pull origin main'
