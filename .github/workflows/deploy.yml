@@ -13,13 +13,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up SSH key and directory
-      run: |
-        mkdir -p ~/.ssh
-        echo "$SSHKEY" > ~/.ssh/github
-        chmod 600 ~/.ssh/github
-        ssh-keyscan -H 89.147.108.14 >> ~/.ssh/known_hosts  
-
     - name: Deploy to VPS
       run: |
         ssh -p 1729 -i ~/.ssh/github eve@89.147.108.14 'cd /var/www/dev-stjp && git pull origin main'
