@@ -15,4 +15,4 @@ jobs:
 
     - name: Deploy to VPS
       run: |
-        ssh -i ~/.ssh/github eve@89.147.108.14 'cd /var/www/dev-stjp && git pull origin main'
+        ssh -p 1729 -i ~/.ssh/github eve@89.147.108.14 'cd /var/www/dev-stjp && git pull origin main'
